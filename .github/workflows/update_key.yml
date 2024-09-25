@@ -30,7 +30,7 @@ jobs:
     - name: Commit Changes
       run: |
         git config --local user.email "noreply@github.com"  # Verwende eine generische E-Mail
-        git config --local user.name "Pulse-External-Team"  # Verwende deinen GitHub-Nutzernamen
+        git config --local user.name "Automated Action"  # Verwende einen neutralen Namen oder deinen GitHub-Namen
         git add Youre_Key.txt
         git commit -m "Update Youre_Key.txt with a new key" || echo "No changes to commit"
         git push --force --quiet https://x-access-token:${{ secrets.Pulse_External_Token }}@github.com/Pulse-External-Team/Pulse-Executor.git HEAD:main
