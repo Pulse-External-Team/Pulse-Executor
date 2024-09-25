@@ -5,17 +5,26 @@ on:
     branches:
       - main
 
+# Set permissions to allow pushing changes
+permissions:
+  contents: write
+
 jobs:
   update_key:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repository with token to ensure push permissions
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
+      # Replace content in Youre_Key.txt
       - name: Replace content in Youre_Key.txt
         run: echo "PulseKey_" > Youre_Key.txt
 
+      # Commit changes if the file has changed
       - name: Commit changes if file has changed
         run: |
           git config --local user.name "github-actions"
