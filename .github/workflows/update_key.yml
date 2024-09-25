@@ -1,4 +1,4 @@
-name: Update Key
+name: Update Key File
 
 on:
   push:
@@ -10,27 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Generate Random Key
-      id: generate_key
-      run: |
-        # Generate a random key
-        KEY="PulseKey_$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)"
-        echo "Generated key: $KEY"
-        echo "::set-output name=key::$KEY"
+      - name: Replace content in Youre_Key.txt
+        run: |
+          echo "PulseKey_" > Youre_Key.txt
 
-    - name: Clear and Update Youre_Key.txt
-      run: |
-        # Clear the file and write the new key
-        echo "" > Youre_Key.txt  # Clear the file
-        echo "${{ steps.generate_key.outputs.key }}" > Youre_Key.txt  # Write new key
-
-    - name: Commit Changes
-      run: |
-        git config --local user.email "noreply@github.com"  # Verwende eine generische E-Mail
-        git config --local user.name "Automated Action"  # Verwende einen neutralen Namen oder deinen GitHub-Namen
-        git add Youre_Key.txt
-        git commit -m "Update Youre_Key.txt with a new key" || echo "No changes to commit"
-        git push --force --quiet https://x-access-token:${{ secrets.Pulse_External_Token }}@github.com/Pulse-External-Team/Pulse-Executor.git HEAD:main
+      - name: Commit changes
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "actions@github.com"
+          git add Youre_Key.txt
+          git commit -m "Update Youre_Key.txt with PulseKey_"
+          git push
