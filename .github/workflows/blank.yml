@@ -1,29 +1,38 @@
-name: Update Youre_Key.txt every 5 minutes
+name: Update Key
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"  # Alle 5 Minuten
+  push:
+    branches:
+      - main
 
 jobs:
-  update-key:
+  update_key:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository content
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Generate new key
-        run: |
-          NEW_KEY=$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 30)
-          echo "Neuer Key: $NEW_KEY"  # Debugging-Ausgabe
-          echo "$NEW_KEY" > Youre_Key.txt
+    - name: Generate Random Key
+      id: generate_key
+      run: |
+        # Generate a random key
+        KEY="PulseKey_$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)"
+        echo "Generated key: $KEY"
+        echo "::set-output name=key::$KEY"
 
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add Youre_Key.txt
-          git commit -m "Updated Youre_Key.txt with new key" || echo "Kein Update erforderlich"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.Pulse-External-Token }}  # Hier den Secret-Namen verwenden
+    - name: Clear and Update Youre_Key.txt
+      run: |
+        # Clear the file and write the new key
+        echo "" > Youre_Key.txt  # Clear the file
+        echo "${{ steps.generate_key.outputs.key }}" > Youre_Key.txt  # Write new key
+
+    - name: Commit Changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add Youre_Key.txt
+        git commit -m "Update Youre_Key.txt with a new key"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.Pulse-External-Token }}  # Verwende den Token aus den Secrets
