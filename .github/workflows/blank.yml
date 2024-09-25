@@ -26,4 +26,4 @@ jobs:
           git commit -m "Updated Youre_Key.txt with new key" || echo "Kein Update erforderlich"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.Pulse-External-Token }}  # Hier den Secret-Namen verwenden
