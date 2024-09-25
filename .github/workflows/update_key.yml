@@ -32,7 +32,7 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add Youre_Key.txt
-        git commit -m "Update Youre_Key.txt with a new key"
+        git commit -m "Update Youre_Key.txt with a new key" || echo "No changes to commit"
         git push
       env:
-        GITHUB_TOKEN: ${{ secrets.Pulse-External-Token }}  # Verwende den Token aus den Secrets
+        GITHUB_TOKEN: ${{ secrets.Pulse-External-Token }}  # Verwende den Secret-Token
