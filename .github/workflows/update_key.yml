@@ -16,10 +16,14 @@ jobs:
       - name: Replace content in Youre_Key.txt
         run: echo "PulseKey_" > Youre_Key.txt
 
-      - name: Commit changes
+      - name: Commit changes if file has changed
         run: |
           git config --local user.name "github-actions"
           git config --local user.email "actions@github.com"
-          git add Youre_Key.txt
-          git commit -m "Update Youre_Key.txt with PulseKey_" || echo "No changes to commit"
-          git push
+          if ! git diff --exit-code Youre_Key.txt; then
+            git add Youre_Key.txt
+            git commit -m "Update Youre_Key.txt with PulseKey_"
+            git push
+          else
+            echo "No changes detected in Youre_Key.txt, skipping commit."
+          fi
