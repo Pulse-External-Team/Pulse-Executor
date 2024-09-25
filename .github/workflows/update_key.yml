@@ -20,6 +20,8 @@ jobs:
         run: |
           git config --local user.name "github-actions"
           git config --local user.email "actions@github.com"
+          
+          # Check if Youre_Key.txt has changes
           if ! git diff --exit-code Youre_Key.txt; then
             git add Youre_Key.txt
             git commit -m "Update Youre_Key.txt with PulseKey_"
