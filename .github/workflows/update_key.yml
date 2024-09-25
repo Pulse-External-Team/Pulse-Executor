@@ -29,10 +29,8 @@ jobs:
 
     - name: Commit Changes
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.email "noreply@github.com"  # Verwende eine generische E-Mail
+        git config --local user.name "Pulse-External-Team"
         git add Youre_Key.txt
         git commit -m "Update Youre_Key.txt with a new key" || echo "No changes to commit"
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Verwende den standardmäßigen GitHub-Token
+        git push --force --quiet https://x-access-token:${{ secrets.Pulse_External_Token }}@github.com/YOUR_USERNAME/YOUR_REPOSITORY.git HEAD:main
