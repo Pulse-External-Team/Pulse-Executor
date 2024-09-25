@@ -20,9 +20,12 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # Replace content in Youre_Key.txt
-      - name: Replace content in Youre_Key.txt
-        run: echo "PulseKey_" > Youre_Key.txt
+      # Generate a 30-character random code and replace content in Youre_Key.txt
+      - name: Generate random code and update Youre_Key.txt
+        run: |
+          # Generate a random 30-character code
+          CODE=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 30)
+          echo "PulseKey_$CODE" > Youre_Key.txt
 
       # Commit changes if the file has changed
       - name: Commit changes if file has changed
