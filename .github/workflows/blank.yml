@@ -1,0 +1,33 @@
+name: Update Youre_Key.txt every 5 minutes
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"  # Alle 5 Minuten
+
+jobs:
+  update-key:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository content
+        uses: actions/checkout@v3
+
+      - name: Generate new key
+        run: |
+          # Erstelle einen 30-Zeichen-langen Key
+          NEW_KEY=$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 30)
+          
+          # Schreibe den Key in die Datei Youre_Key.txt
+          echo "$NEW_KEY" > Youre_Key.txt
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add Youre_Key.txt
+          git commit -m "Updated Youre_Key.txt with new key"
+          git push
+        env:
+          # Das hier sind Umgebungsvariablen, um Zugriff auf das Repo zu haben
+          # Du musst dafür ein GitHub-Personal-Access-Token erstellen und als Repository Secret speichern.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
